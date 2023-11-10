@@ -16,3 +16,7 @@ Add timed subtitles to a video, which highlights the current word in the subtitl
 ```bash
 $ python main.py input.mp4 --whisper_data data.json out.mp4
 ```
+
+## Why?
+
+Why not
