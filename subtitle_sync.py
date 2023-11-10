@@ -51,6 +51,8 @@ def create_subtitles(data):
 
         ca = current_sentence.find(chunk["text"], ca)
 
+        # TODO: Also translate sentence and add to subtitle
+
         subtitles += f"Dialogue: 0,{start_time},{end_time},Default,,0000,0000,0000,,{highlighted_sentence}\n"
 
     return subtitles
