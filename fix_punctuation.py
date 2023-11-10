@@ -8,7 +8,7 @@ def fix_punctuation(text: str) -> str:
         messages=[
             {
             "role": "system",
-            "content": "Add punctuation to this text where it makes sense to improve the subtitles. IMPORTANT: make sure to keep the order and all the characters the exact same. otherwise the software will break"
+            "content": "Add punctuation to this text where it makes sense to improve the subtitles. DO NOT fix spelling or add/remove apostrophes. IMPORTANT: make sure to keep the order and all the characters the exact same. otherwise the software will break"
             },
             {
             "role": "user",
