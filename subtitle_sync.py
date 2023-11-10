@@ -1,7 +1,7 @@
 import re, json
 
-data = json.loads("data.json")
 output_path = "./subtitles.ass"
+
 
 def format_timestamp(time_in_seconds):
     """Converts a timestamp in seconds to ASS format (hours:minutes:seconds.centiseconds)."""
@@ -30,7 +30,6 @@ def create_subtitles(data):
 
     # Split the full text into sentences based on full stops followed by a space or the end of text
     sentences = re.split(r"(?<=[。.,、，])\s*", full_text)
-    print(sentences)
 
     # Initialize a variable to keep track of the sentence currently being processed
     current_sentence = sentences.pop(0)
@@ -51,16 +50,17 @@ def create_subtitles(data):
         )
 
         ca = current_sentence.find(chunk["text"], ca)
-        print(ca)
 
         subtitles += f"Dialogue: 0,{start_time},{end_time},Default,,0000,0000,0000,,{highlighted_sentence}\n"
 
     return subtitles
 
-# Hanzi-Pinyin-Font: https://github.com/parlr/hanzi-pinyin-font
 
-# ASS file header and style configuration
-ass_header = """[Script Info]
+def subtitle_sync(whisper_data, chinese=False):
+    # Hanzi-Pinyin-Font: https://github.com/parlr/hanzi-pinyin-font
+    font = "Hanzi-Pinyin-Font" if chinese else "Arial"
+
+    ass_header = f"""[Script Info]
 ScriptType: v4.00+
 Collisions: Normal
 PlayDepth: 0
@@ -69,13 +69,12 @@ PlayResX: 1920
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Default,Hanzi-Pinyin-Font,64,&H00FFFFFF,&H00000000,&H00000000,&H64000000,0,0,0,0,100,100,0,0,1,1,0,2,10,10,20,1
+Style: Default,{font},64,&H00FFFFFF,&H00000000,&H00000000,&H64000000,0,0,0,0,100,100,0,0,1,1,0,2,10,10,20,1
+    """
 
-"""
+    # Write the ASS subtitle file
+    with open(output_path, "w") as file:
+        file.write(ass_header)
+        file.write(create_subtitles(whisper_data))
 
-# Write the ASS subtitle file
-with open(output_path, "w") as file:
-    file.write(ass_header)
-    file.write(create_subtitles(data))
-
-print(f"ASS subtitle file has been created at {output_path}.")
+    return output_path

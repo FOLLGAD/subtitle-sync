@@ -1,7 +1,8 @@
 from openai import OpenAI
-client = OpenAI()
 
-def add_punctuation(text: str) -> str:
+def fix_punctuation(text: str) -> str:
+    client = OpenAI()
+    
     response = client.chat.completions.create(
         model="gpt-4-1106-preview",
         messages=[
