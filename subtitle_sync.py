@@ -26,7 +26,7 @@ def create_subtitles(data):
     subtitles = "[Events]\n"
     subtitles += "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n"
 
-    full_text = data["text"]
+    full_text = "".join([d["text"] for d in data["chunks"]])
 
     # Split the full text into sentences based on full stops followed by a space or the end of text
     sentences = re.split(r"(?<=[。.,、，])\s*", full_text)
@@ -40,8 +40,8 @@ def create_subtitles(data):
         end_time = format_timestamp(chunk["timestamp"][1])
         # If the chunk text is not in the current sentence, move to the next sentence
 
-        chunk_no_punctuation = re.sub(r"[。.,、，]", "", chunk["text"])
-        if chunk_no_punctuation not in current_sentence[ca:]:
+        chunk_no_punctuation = re.sub(r"[。.,、，!?]", "", chunk["text"])
+        if chunk_no_punctuation not in current_sentence[ca:] and chunk_no_punctuation in sentences[0]:
             current_sentence = sentences.pop(0)
             ca = 0
 
